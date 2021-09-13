@@ -46,41 +46,63 @@ const findPeopleByName = (personName, done) => {
 const food = 'Fish';
 
 const findOneByFood = (food, done) => {
-  Person.findOne( { food: personName }, (error, data) => {
+  Person.findOne( { food }, (error, data) => {
     if (error) return console.error(error);
     done(null, data);
   });
 };
 
+const personId = "";
+
 const findPersonById = (personId, done) => {
-  if (error) return done(error);
-  done(null /*, data*/);
+  Person.findById( personId, (error, data) => {
+    if (error) return console.error(error);
+    done(null, data);
+  });
 };
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
 
-  if (error) return done(error);
-  done(null /*, data*/);
+  Person.findById( personId, (error, person) => {
+    if (error) return console.error(error);
+
+    // Array.push() method to add "hamburger" to the list of the person's favoriteFoods
+    person.favoriteFoods.push(foodToAdd);
+
+    // and inside the find callback - save() the updated Person.
+    person.save((err, updatedPerson) => {
+      if(err) return console.log(err);
+      done(null, updatedPerson)
+    })
+  });
 };
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
+  const query = { name: personName };
 
-  if (error) return done(error);
-  done(null /*, data*/);
+  Person.findOneAndUpdate( query, { age: ageToSet}, { new: true }, (error, data) => {
+    if (error) return console.error(error);
+    done(null, data);
+  });
 };
 
 const removeById = (personId, done) => {
-  if (error) return done(error);
-  done(null /*, data*/);
+  Person.findByIdAndRemove( personId, (error, data) => {
+    if (error) return console.error(error);
+    done(null, data);
+  });
 };
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
+  const query = { name: nameToRemove };
 
-  if (error) return done(error);
-  done(null /*, data*/);
+  Person.remove(query, (error, data) => {
+    if(error) return console.log(error);
+    done(null, data);
+  })
 };
 
 const queryChain = (done) => {
